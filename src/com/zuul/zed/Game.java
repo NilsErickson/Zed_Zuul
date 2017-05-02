@@ -1,23 +1,6 @@
 package com.zuul.zed;
 import java.lang.String;
 /**
- *  This class is the main class of the "World of Zuul" application.
- *  "World of Zuul" is a very simple, text based adventure game.  Users
- *  can walk around some scenery. That's all. It should really be extended
- *  to make it more interesting!
- *
- *  To play this game, create an instance of this class and call the "play"
- *  method.
- *
- *  This main class creates and initialises all the others: it creates all
- *  rooms, creates the parser and starts the game.  It also evaluates and
- *  executes the commands that the parser returns.
- *
- * @author  Michael Kölling and David J. Barnes
- * @version 2016.02.29
- */
-
-/**
  * This class is part of the "World of Ninja: Zed" application
  *
  * Changes include:
@@ -28,6 +11,7 @@ import java.lang.String;
  *
  * @author Nils Erickson
  * @version A1 2017.04.09
+ * todo Clean up Comments dialog
  */
 
 /**
@@ -47,6 +31,13 @@ import java.lang.String;
  * @version A1 2017.04.25
  */
 
+/**
+ * A4 Changes:
+ * Added repository to GitHub
+ * Commited project to master
+ * Added Sneak command
+ * Cleaned up Welcome
+ */
 public class Game
 {
     private Parser parser;
@@ -134,8 +125,10 @@ public class Game
         System.out.println("Since you were born, you have lived in this camp.");
         System.out.println("Today is your day off, your allowed to move around the camp.");
         System.out.println("Take a look around the camp to get your bearing.");
-        System.out.println("Press quit to get some rest as tomorrow is another training day");
+        System.out.println("Type quit to get some rest as tomorrow is another training day");
+        System.out.println("Type 'go' and the desired direction to move around");
         System.out.println("Type 'help' if you need help remembering.");
+        System.out.println("Try out all of the commands to gain some insight with the world");
         System.out.println();
         printLocationInfo();
     }
@@ -169,6 +162,9 @@ public class Game
         }
         else if (commandWord.equals("meditate")){
             meditate();
+        }
+        else if (commandWord.equals("sneak")){
+            sneak();
         }
 
         return wantToQuit;
@@ -245,9 +241,17 @@ public class Game
         System.out.println(currentRoom.getLongDescription());
     }
     /**
-     * Has your character meditate...nothing special
+     * Has your character meditate...
+     * todo expand upon concept to trigger while in ZenTemple to provide flavor dialog
      */
     private void meditate(){
         System.out.println("You spend a few moments reflecting on what you have learned...");
+    }
+    /**
+     * Enters Sneak mode...
+     * todo expand upon to have character enter stealth mode to sneak past a gaurd
+     */
+    private void sneak(){
+        System.out.println("You suddenly get low to the ground and assume the Shinobi stance");
     }
 }
