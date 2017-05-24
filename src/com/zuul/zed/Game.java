@@ -1,105 +1,24 @@
 package com.zuul.zed;
+
 import java.lang.String;
 /**
- * This class is part of the "World of Ninja: Zed" application
- *
- * Changes include:
- * -Changed the printWelcome to include more descriptive text
- * -Changed the rooms to include the newer versions that include the newer games
- * -Changed the room layouts to fit my scenario. Added 7 rooms in total to createRooms class
- * -Changed the Quit dialog as well as Help dialog
- *
+ * Changes implemented since last update:
+ * Removed createRoom method, created Scenario class instead
+ * Main class now handles game start instead of Game method
+ * Added comments on each method for brief description
+ * todo add specified comments with // to explain method features (low)
  * @author Nils Erickson
- * @version A1 2017.04.09
- * todo Clean up Comments dialog
+ * @version 2017.04.25
  */
-
-/**
- * A2 Changes include:
- * - Refractored the class by adding a new method called printLocationInfo() to cut down
- * on coupling between printWelcome and goRoom
- * @author Nils Erickson
- * @version A1 2017.04.12
- */
-
-/**
- * A3 Changes include:
- * Adding the items to this class
- * Included item descriptions
- * Lessed reliant on print and more on string
- * @author Nils Erickson
- * @version A1 2017.04.25
- */
-
-/**
- * A4 Changes:
- * Added repository to GitHub
- * Commited project to master
- * Added Sneak command
- * Cleaned up Welcome
- */
-public class Game
-{
+public class Game {
     private Parser parser;
     private Room currentRoom;
-
-    /**
-     * Create the game and initialise its internal map.
-     */
-    public Game()
-    {
-        createRooms();
-        parser = new Parser();
-    }
-
-    /**
-     * Create all the rooms and link their exits together.
-     */
-    private void createRooms()
-    {
-        Room ninjaRoom, weaponroom, meetingRoom, zenTemple, stealthRoom, restRoom, masterRoom;
-
-        // create the rooms
-        ninjaRoom = new Room("in the main enterence to the camp. You'll need to walk 10000 steps to get to the next room.");
-        weaponroom = new Room("in the Weapon's room. Normally this is where you go to grab your Nunchaku, but not today.");
-        meetingRoom = new Room("in the Meeting room. This is where classes are normally held. We will be here tomorrow to be sure");
-        zenTemple = new Room("in the Meditation room. When done for the day, this is where you clear your head.");
-        stealthRoom = new Room("in the Stealth training room. Ninja are made here, slow but steady will keep you alive.");
-        restRoom = new Room("in the Barracks. When I am done for th day, I will come back here for some rest.");
-        masterRoom = new Room("in the Master's room. Master is current meditating right now. Better leave him alone.");
-
-        weaponroom.addItem(new Item("Katana", 3));
-        weaponroom.addItem(new Item("Nunchaku", 1));
-        weaponroom.addItem(new Item("Bo", 2));
-        weaponroom.addItem(new Item("Sai", 2));
-        ninjaRoom.addItem(new Item("Master's Keys", 1));
-        meetingRoom.addItem(new Item("Secret Plans", 1));
-        zenTemple.addItem(new Item("Prayer beads", 1));
-        stealthRoom.addItem(new Item("Throwing Star", 2));
-        restRoom.addItem(new Item("Risque magazines", 1));
-        masterRoom.addItem(new Item("Ancient Shinobi Scroll", 5));
-
-        // initialise room exits
-        ninjaRoom.setExits("north", weaponroom);
-        weaponroom.setExits("north", meetingRoom);
-        meetingRoom.setExits("north", stealthRoom);
-        meetingRoom.setExits("east", restRoom);
-        meetingRoom.setExits("south", weaponroom);
-        meetingRoom.setExits("west", zenTemple);
-        zenTemple.setExits("east", meetingRoom);
-        stealthRoom.setExits("south", meetingRoom);
-        restRoom.setExits("east", masterRoom);
-        restRoom.setExits("west", meetingRoom);
-        masterRoom.setExits("west", restRoom);
-
-        currentRoom = ninjaRoom;  // start game @ ninjaRoom
-    }
+    private Scenario scenario;
 
     /**
      *  Main play routine.  Loops until end of play.
      */
-    public void play()
-    {
+    public void play() {
         printWelcome();
 
         // Enter the main command loop.  Here we repeatedly read commands and
@@ -112,12 +31,19 @@ public class Game
         }
         System.out.println("Tomorrow is another day, better get some sleep.");
     }
-
+    /**
+     * Create the game and initialise its internal map.
+     */
+    public Game(){
+        scenario = new Scenario();
+        currentRoom = scenario.getStartRoom();
+        parser = new Parser();
+    }
     /**
      * Print out the opening message for the player.
+     * todo keep for alpha testing; once features added, replace with established story (low)
      */
-    private void printWelcome()
-    {
+    private void printWelcome() {
         System.out.println();
         System.out.println("Welcome to the World of Ninja: Zed!!!");
         System.out.println("World of Ninja: Zed is a new adventure game.");
@@ -138,7 +64,7 @@ public class Game
      * @param command The command to be processed.
      * @return true If the command ends the game, false otherwise.
      */
-    private boolean processCommand(Command command)
+    private boolean processCommand(Command command)  //implementation of user commands
     {
         boolean wantToQuit = false;
 
@@ -146,7 +72,7 @@ public class Game
             System.out.println("Uhhhh...what was that");
             return false;
         }
-
+        //todo features to add: pickup; drop; attack; (to be added) (med)
         String commandWord = command.getCommandWord();
         if (commandWord.equals("help")) {
             printHelp();
@@ -170,15 +96,12 @@ public class Game
         return wantToQuit;
     }
 
-    // implementations of user commands:
-
     /**
      * Print out some help information.
      * Here we print some stupid, cryptic message and a list of the
      * command words.
      */
-    private void printHelp()
-    {
+    private void printHelp(){
         System.out.println("Your command words are:");
         System.out.println(parser.showCommands());
     }
@@ -187,8 +110,7 @@ public class Game
      * Try to go in one direction. If there is an exit, enter
      * the new room, otherwise print an error message.
      */
-    private void goRoom(Command command)
-    {
+    private void goRoom(Command command){
         if(!command.hasSecondWord()) {
             // if there is no second word, we don't know where to go...
             System.out.println("Go where?");
@@ -214,8 +136,7 @@ public class Game
      * whether we really quit the game.
      * @return true, if this command quits the game, false otherwise.
      */
-    private boolean quit(Command command)
-    {
+    private boolean quit(Command command){
         if(command.hasSecondWord()) {
             System.out.println("Quit what?");
             return false;
@@ -228,28 +149,32 @@ public class Game
     /**
      * Prints information about the current location
      */
-    private void printLocationInfo()
-    {
+    private void printLocationInfo(){
         System.out.println("You are " + currentRoom.getLongDescription());
         System.out.print("Exits: ");
         currentRoom.getExitString();
     }
+
     /**
      * Prints information about a particular object within the world
      */
     private void look(){
         System.out.println(currentRoom.getLongDescription());
     }
+
     /**
      * Has your character meditate...
-     * todo expand upon concept to trigger while in ZenTemple to provide flavor dialog
+     * todo add two functions to this ability; have user restore stamina/health; provides unique dialog in Temple
+     * todo explore option to turn into separate class
      */
     private void meditate(){
         System.out.println("You spend a few moments reflecting on what you have learned...");
     }
+
     /**
      * Enters Sneak mode...
-     * todo expand upon to have character enter stealth mode to sneak past a gaurd
+     * todo expand upon to have character enter stealth mode to sneak past guards
+     * todo explore option to create class to handle
      */
     private void sneak(){
         System.out.println("You suddenly get low to the ground and assume the Shinobi stance");
