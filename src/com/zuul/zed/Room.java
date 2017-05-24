@@ -5,22 +5,15 @@ import java.util.Iterator;
 import java.util.HashSet;
 
 /**
- * A1 No changes to this class
- *
- * A2 Changes include:
- * - Editing the room class to incorperate new directions in getExit
- *
- * A3 Changes include:
- * -Add Iterator to include interate on items and make them easier to describe
- * -Add Hashmap sets for items so to be similar to exits
- *
+ * Room class contains the hashmap for each given room to facilitate room creation
+ * Room class also contains item information
  * @author Nils Erickson
- * @version 2017.04.25
+ * @version 2017-05-23
  */
 public class Room
 {
     private String description;
-    private HashMap<String, Room> exits;
+    public HashMap<String, Room> exits;
     private HashSet items;
 
     /**

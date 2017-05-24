@@ -3,10 +3,11 @@ package com.zuul.zed;
 import java.util.Scanner;
 
 /**
- * No changes to this file
+ * No changes from original source
+ * @ Author: Nils Erickson
+ * @ Version: 2017-05-23
  */
-public class Parser
-{
+public class Parser{
     private CommandWords commands;  // holds all valid command words
     private Scanner reader;         // source of command input
 
